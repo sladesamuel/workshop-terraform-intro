@@ -28,24 +28,14 @@ We first need to tell Terraform what provider(s) we want to use. In our case, we
 
 ```diff
 + terraform {
-+   required_providers {
-+     aws = {
-+       source  = "hashicorp/aws"
-+       version = "~> 3.27"
-+     }
-+   }
-+
 +   required_version = ">= 0.14.9"
 + }
 ```
 
 To quickly sum up each part here:
 
-- The `terraform` block contains Terraform settings.
-- A provider is a plugin that Terraform uses to create and manage resources. In this case, we have specified `aws` as our provider.
-  - The `aws` provider plugin is provided by "hashicorp/aws", as defined in our `source` property
-  - The `aws` provider plugin is pinned to version 3.27
-- Our required Terraform version needs to be at least 0.14.9
+- The `terraform` block contains Terraform settings
+- We have specified that we required at least version 0.14.9 of Terraform
 
 > Further reading on providers can be found [here](https://www.terraform.io/language/providers/requirements).
 
@@ -67,7 +57,7 @@ Now that we've configured Terraform, we need to add our provider, so, add the fo
 +
 + provider "aws" {
 +   profile = "default"
-+   region  = "eu-west-1"
++   region  = "eu-west-2"
 + }
 ```
 
@@ -115,6 +105,8 @@ Now that we have installed our AWS provider plugin and initialized our local sta
 $ terraform plan
 ```
 
+> Note: If you are using AWS Vault, you will need to enter into a subshell using the vault to supply your credentials. For example, `aws-vault exec <profile_name> -- terraform plan`.
+
 This plan will show what is going to be created, changed, or deleted. In our case, everything is new, so the plan should show that our VPC is going to be created in our AWS account.
 
 > Note that this plan has not been executed within our AWS account - it is just to show what will be done when we choose to apply the plan.
@@ -126,6 +118,8 @@ The final step is to run the plan. To apply changes, run the following command.
 ```shell
 $ terraform apply
 ```
+
+> Note: If you are using AWS Vault, you will need to enter into a subshell using the vault to supply your credentials. For example, `aws-vault exec <profile_name> -- terraform apply`.
 
 Notice here that we are prompted to enter `yes` to confirm the application and we should see the same output above as we did when running the plan. This is because Terraform's `apply` command produces a plan first and then asks for confirmation before making any changes to our AWS account. If you enter anything other than `yes` here, then the job will be aborted and no changes will be made. This can be skipped for automation purposes, but for now, it's wise to keep.
 
@@ -142,7 +136,7 @@ Within your `main.tf` file, make the following changes.
 ```diff
 + variable "vpc_name" {
 +   description = "The name of our VPC"
-+   value       = string
++   type        = string
 +   default     = "our-vpc"
 + }
 
@@ -174,6 +168,8 @@ That's all for this workshop. Before we finish, let's make sure we cleanup what 
 ```shell
 $ terraform destroy
 ```
+
+> Note: If you are using AWS Vault, you will need to enter into a subshell using the vault to supply your credentials. For example, `aws-vault exec <profile_name> -- terraform destroy`.
 
 Again, this will present you with a plan of what is going to be removed and will also ask for confirmation before proceeding. Type `yes` and hit enter to confirm the cleanup.
 
