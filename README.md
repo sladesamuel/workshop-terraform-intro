@@ -27,16 +27,16 @@ To begin with, create a file called `main.tf`. Terraform supports breaking out r
 We first need to tell Terraform what provider(s) we want to use. In our case, we are going to use AWS, as that is where we want to build our infrastructure. So, start by entering the following into the `main.tf` file.
 
 ```diff
-+ terraform { +
-+   required_providers { +
-+     aws = { +
-+       source  = "hashicorp/aws" +
-+       version = "~> 3.27" +
-+     } +
-+   } +
-+ +
-+   required_version = ">= 0.14.9" +
-+ } +
++ terraform {
++   required_providers {
++     aws = {
++       source  = "hashicorp/aws"
++       version = "~> 3.27"
++     }
++   }
++
++   required_version = ">= 0.14.9"
++ }
 ```
 
 To quickly sum up each part here:
@@ -54,21 +54,21 @@ To quickly sum up each part here:
 Now that we've configured Terraform, we need to add our provider, so, add the following into the same file.
 
 ```diff
-# terraform { #
-+   required_providers { +
-+     aws = { +
-+       source  = "hashicorp/aws" +
-+       version = "~> 3.27" +
-+     } +
-+   } +
-+ +
-#   required_version = ">= 0.14.9" #
-# } #
-+ +
-+ provider "aws" { +
-+   profile = "default" +
-+   region  = "eu-west-1" +
-+ } +
+# terraform {
++   required_providers {
++     aws = {
++       source  = "hashicorp/aws"
++       version = "~> 3.27"
++     }
++   }
++
+#   required_version = ">= 0.14.9"
+# }
++
++ provider "aws" {
++   profile = "default"
++   region  = "eu-west-1"
++ }
 ```
 
 You can see here that we've added a Terraform setting to load in our AWS provider plugin and pin its version to 3.27. We've then defined some settings for the AWS provider in the `provider` block. This defines the profile and region we are using.
@@ -81,14 +81,14 @@ Finally, we can start creating our resources. For this workshop, we are only goi
 
 ```diff
 ...
-+ +
-+ resource "aws_vpc" "our_vpc" { +
-+   cidr_block = "10.0.0.0/16" +
-+ +
-+   tags = { +
-+     Name = "our-vpc" +
-+   } +
-+ } +
++
++ resource "aws_vpc" "our_vpc" {
++   cidr_block = "10.0.0.0/16"
++
++   tags = {
++     Name = "our-vpc"
++   }
++ }
 ```
 
 This is known in HCL as a [Resource Block](https://www.terraform.io/language/resources/syntax). The `aws_vpc` defines what the resource is we are creating. In this case, we are using a VPC as defined in the AWS provider plugin. We then name it `our_vpc`, but we could name it anything we like. This is just a reference for use within our HCL scripts. We have set some properties here, namely the CIDR Block we wish to use, and also we have given it a name tag so that we can easily identify it within our AWS Console later.
@@ -140,19 +140,19 @@ So far, we have walked through a very simply setup. So, let's take it a little f
 Within your `main.tf` file, make the following changes.
 
 ```diff
-+ variable "vpc_name" { +
-+   description = "The name of our VPC" +
-+   value       = string +
-+   default     = "our-vpc" +
-+ } +
++ variable "vpc_name" {
++   description = "The name of our VPC"
++   value       = string
++   default     = "our-vpc"
++ }
 
-# resource "aws_vpc" "our_vpc" { #
-#   cidr_block = "10.0.0.0/16" #
-# #
-#   tags = { #
-!     Name = var.vpc_name !
-#   } #
-# } #
+# resource "aws_vpc" "our_vpc" {
+#   cidr_block = "10.0.0.0/16"
+#
+#   tags = {
+!     Name = var.vpc_name
+#   }
+# }
 ```
 
 We have now added an optional variable to our script. This variable will allow us to change the name of our VPC, but it defaults to the value we had before. Now we can run our apply command again, but this time we will specify the name for the VPC.
