@@ -12,7 +12,7 @@ The following needs to be setup before this workshop can be attempted.
 1. [Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started)
 1. A text/code editor ([Visual Studio Code](https://code.visualstudio.com/) is recommended, but any other familiar text editors can also be used, such as Notepad, Notepad++, Sublime Text, Vim, Nano, etc)
 
-As part of the AWS CLI setup, you will also need to ensure you have an AWS account and have generated an [Access Key and Secret Key](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-prereqs.html#getting-started-prereqs-keys) pair.
+As part of the AWS CLI setup, you will also need to ensure you have an AWS account and have generated an [Access Key and Secret Key](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-prereqs.html#getting-started-prereqs-keys) pair. You can then use those keys to configure your local credentials using the command [`aws configure`](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config) on the terminal.
 
 > Note: A little more advanced, but an alternative to directly configuring your AWS CLI instance to access a single AWS account is to use [AWS Vault](https://github.com/99designs/aws-vault) to manage access to multiple AWS accounts.
 
