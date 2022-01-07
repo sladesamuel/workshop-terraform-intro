@@ -70,7 +70,7 @@ You can see here that we've added a Terraform setting to load in our AWS provide
 Finally, we can start creating our resources. For this workshop, we are only going to create a VPC resource with a predefined configuration. We will look later how to pass variables to allow reuse and customization of our Terraform scripts.
 
 ```diff
-...
+# ...
 +
 + resource "aws_vpc" "our_vpc" {
 +   cidr_block = "10.0.0.0/16"
@@ -139,7 +139,7 @@ Within your `main.tf` file, make the following changes.
 +   type        = string
 +   default     = "our-vpc"
 + }
-
++
 # resource "aws_vpc" "our_vpc" {
 #   cidr_block = "10.0.0.0/16"
 #
@@ -161,7 +161,26 @@ You will notice that to define the variable value, we must pass it through as a 
 
 > You can read more about variables in Terraform [here](https://www.terraform.io/language/values/variables).
 
-### Step 6: Cleanup
+### Step 6: Add a Subnet to the VPC
+
+The last point to cover in this workshop is referencing another resource. In this step, we are going to create an [AWS Subnet](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) and connect it to our VPC.
+
+```diff
+# ...
++
++ resource "aws_subnet" "our_subnet" {
++   vpc_id     = aws_vpc.our_vpc.id
++   cidr_block = "10.0.0.0/24"
++
++   tags = {
++     Name = "our-subnet"
++   }
++ }
+```
+
+Now, if we run the `apply` command again, we should see that the plan shows us that a new subnet resource will be created. Confirming this step will create the resource in AWS. You can view this [here](https://eu-west-2.console.aws.amazon.com/vpc/home?region=eu-west-2#subnets:) in your AWS Console.
+
+### Step 7: Cleanup
 
 That's all for this workshop. Before we finish, let's make sure we cleanup what we've done, so that we do not incur any unwanted costs within our AWS account. To do this, we simply need to run the [destroy](https://www.terraform.io/cli/commands/destroy) command.
 
